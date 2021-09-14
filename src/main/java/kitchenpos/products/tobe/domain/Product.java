@@ -1,7 +1,9 @@
 package kitchenpos.products.tobe.domain;
 
+import kitchenpos.common.Value;
+
 import javax.persistence.*;
-import java.util.Objects;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 /**
@@ -17,7 +19,7 @@ import java.util.UUID;
  * - 상품의 목록을 조회할 수 있다.
  */
 @Entity
-public class Product {
+public class Product extends Value<Product> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
@@ -41,16 +43,7 @@ public class Product {
         this.price = price;
     }
 
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Product)) return false;
-        final Product product = (Product) o;
-        return id.equals(product.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
+    public void change(final BigDecimal price) {
+        change(new Price(price));
     }
 }
