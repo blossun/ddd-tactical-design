@@ -1,12 +1,17 @@
 package kitchenpos.products.tobe.domain;
 
+import javax.persistence.Embeddable;
 import java.util.Objects;
 
 /**
  * - `DisplayedName`에는`Profanity`가 포함될 수 없다.*
  */
+@Embeddable
 public class DisplayedName {
-    private final String name;
+    private String name;
+
+    public DisplayedName() {
+    }
 
     public DisplayedName(final String name, final Profanities profanities) {
         if (profanities.contains(name)) {
