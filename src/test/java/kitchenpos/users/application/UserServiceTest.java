@@ -1,6 +1,9 @@
 package kitchenpos.users.application;
 
+import kitchenpos.users.domain.ChangedPasswordEvent;
 import kitchenpos.users.domain.SignedUpEvent;
+import kitchenpos.users.domain.User;
+import kitchenpos.users.domain.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,11 +21,22 @@ class UserServiceTest {
     @Autowired
     private FakeSender fakeSender;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Test
     void join() {
         assertThat(fakeSender.getCount()).isEqualTo(0);
         userService.join("Solar");
         assertThat(fakeSender.getCount()).isEqualTo(1);
+    }
+
+    @Test
+    void changePassword() {
+        final User user = userRepository.save(new User("Solar"));
+        int count = fakeSender.getCount();
+        userService.changePassword(user.getName());
+        assertThat(fakeSender.getCount()).isEqualTo(count + 1);
     }
 }
 
@@ -33,6 +47,12 @@ class FakeSender implements MessageSender {
     @EventListener
     @Override
     public void send(final SignedUpEvent event) {
+        count++;
+    }
+
+    @EventListener
+    public void send(final ChangedPasswordEvent event) {
+        System.out.println(event);
         count++;
     }
 

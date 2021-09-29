@@ -7,6 +7,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service
 public class UserService {
     private final UserRepository userRepository;
@@ -21,5 +23,12 @@ public class UserService {
     public void join(final String name) {
         User user = new User(name);
         publisher.publishEvent(new SignedUpEvent(name)); //이벤트 발행
+    }
+
+    @Transactional
+    public void changePassword(final String name) {
+        final User user = userRepository.findByName(name);
+        user.changePassword(UUID.randomUUID().toString());
+        userRepository.save(user);
     }
 }
