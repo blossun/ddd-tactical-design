@@ -15,6 +15,7 @@ public class User extends AbstractAggregateRoot<User> {
     private Long id;
     private String name;
     private String password = UUID.randomUUID().toString();
+    private boolean subscribed = false;
 
     protected User() {
     }
@@ -25,7 +26,7 @@ public class User extends AbstractAggregateRoot<User> {
 
     public void changePassword(final String password) {
         this.password = password;
-        registerEvent(new ChangedPasswordEvent(id, name)); //이벤트 등록
+        registerEvent(new ChangedPasswordEvent(id, name, subscribed)); //이벤트 등록
     }
 
     public Long getId() {

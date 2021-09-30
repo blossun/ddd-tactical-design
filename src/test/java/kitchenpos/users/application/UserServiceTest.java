@@ -11,7 +11,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class UserServiceTest {
@@ -50,7 +49,7 @@ class FakeSender implements MessageSender {
         count++;
     }
 
-    @EventListener
+    @EventListener(condition = "#event.subscribed")
     public void send(final ChangedPasswordEvent event) {
         System.out.println(event);
         count++;
